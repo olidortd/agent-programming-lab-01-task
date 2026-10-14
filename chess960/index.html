@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" data-theme="neon">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Chess 960</title>
+  <meta name="description" content="Cinematic 3D Fischer Random (Chess 960) battle arena, running entirely in the browser.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%2300f0ff'>&#9822;</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="stage" class="stage"></div>
+
+  <div class="loader" id="loader" role="status">
+    <div class="loader__ring"></div>
+    <p id="loader-text">FORGING THE BATTLEFIELD…</p>
+  </div>
+
+  <div class="hud">
+    <header class="hud-top">
+      <div class="brand">
+        <p class="tag" id="tag"></p>
+        <h1 class="title" id="title"></h1>
+        <p class="pos-info">POSITION <span id="pos-id">#---</span> · <span id="pos-rank" class="pos-rank">--------</span></p>
+      </div>
+      <nav class="toolbar" aria-label="Game controls">
+        <button class="tool" id="btn-new" type="button" title="New random position (N)"><span class="tool__icon">&#10227;</span><span class="tool__label">New</span></button>
+        <button class="tool" id="btn-undo" type="button" title="Undo move (U)"><span class="tool__icon">&#8630;</span><span class="tool__label">Undo</span></button>
+        <button class="tool" id="btn-flip" type="button" title="Rotate board (F)"><span class="tool__icon">&#8693;</span><span class="tool__label">Flip</span></button>
+        <button class="tool" id="btn-cam" type="button" title="Reset tactical view (C)"><span class="tool__icon">&#8982;</span><span class="tool__label">View</span></button>
+        <button class="tool" id="btn-settings" type="button" aria-expanded="false" aria-controls="settings" title="Settings"><span class="tool__icon">&#9881;</span><span class="tool__label">Settings</span></button>
+      </nav>
+    </header>
+
+    <aside class="settings panel" id="settings" hidden>
+      <h2 class="panel__title">GRAPHICS</h2>
+      <label class="row">
+        <span>Quality <small>(now: <b id="quality-now">HIGH</b>)</small></span>
+        <select id="opt-quality">
+          <option value="auto">Auto</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </label>
+      <label class="row"><span>Cinematic capture camera</span><input type="checkbox" id="opt-cinematic"></label>
+      <label class="row"><span>Slow-motion on big captures</span><input type="checkbox" id="opt-slowmo"></label>
+
+      <h2 class="panel__title">AUDIO</h2>
+      <p class="muted">The audio engine arrives in Phase 3.</p>
+
+      <h2 class="panel__title">CONTROLS</h2>
+      <p class="muted">Click a piece, then a glowing square. Drag to orbit, scroll to zoom. To castle, click the king, then its rook. Keys: N new · U undo · F flip · C view · Esc deselect.</p>
+    </aside>
+
+    <aside class="log panel" aria-label="Move log">
+      <h2 class="panel__title">BATTLE LOG</h2>
+      <ol id="moves" class="moves"></ol>
+    </aside>
+
+    <section class="players">
+      <div class="player" id="player-w" data-color="w">
+        <div class="player__crest"></div>
+        <div class="player__info">
+          <div class="player__name" id="name-w"></div>
+          <div class="player__status" id="status-w"></div>
+        </div>
+        <div class="player__caps" id="caps-w"></div>
+      </div>
+      <div class="player" id="player-b" data-color="b">
+        <div class="player__crest"></div>
+        <div class="player__info">
+          <div class="player__name" id="name-b"></div>
+          <div class="player__status" id="status-b"></div>
+        </div>
+        <div class="player__caps" id="caps-b"></div>
+      </div>
+    </section>
+
+    <div class="banner" id="banner" hidden role="alert">
+      <p class="banner__kicker" id="banner-kicker"></p>
+      <h2 class="banner__title" id="banner-title"></h2>
+      <p class="banner__sub" id="banner-sub"></p>
+      <button id="banner-new" class="btn" type="button">NEW BATTLE</button>
+    </div>
+
+    <div class="promo panel" id="promo" hidden role="dialog" aria-label="Choose promotion">
+      <h2 class="panel__title">PROMOTE PAWN</h2>
+      <div class="promo__choices" id="promo-choices"></div>
+    </div>
+  </div>
+
+  <script>
+    // Friendly failure messages: ES modules don't load from file://, and the 3D engine comes from a CDN.
+    (function () {
+      var text = document.getElementById('loader-text');
+      if (location.protocol === 'file:') {
+        text.innerHTML = 'This 3D build must be served over HTTP.<br>Run <code>npx serve</code> or <code>python -m http.server</code> in this folder.';
+        return;
+      }
+      setTimeout(function () {
+        if (!window.__chess960Ready) text.textContent = 'Could not start the 3D engine. Check your connection and that WebGL is enabled.';
+      }, 15000);
+    })();
+  </script>
+  <script src="js/setup960.js"></script>
+  <script src="js/rules.js"></script>
+  <script src="js/themes.js"></script>
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>
