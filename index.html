@@ -29,6 +29,11 @@
             border-radius: 12px; padding: 24px; margin-bottom: 16px; }
     .card h2 { margin: 0 0 8px; font-size: 18px; }
     .card p { margin: 0; color: var(--muted); }
+    .play { display: block; text-decoration: none; color: inherit; border-color: var(--accent);
+            transition: transform .15s, box-shadow .15s; }
+    .play h2 { color: var(--accent); }
+    .play:hover, .play:focus-visible { transform: translateY(-2px); outline: none;
+            box-shadow: 0 6px 24px color-mix(in srgb, var(--accent) 25%, transparent); }
     footer { margin-top: 48px; color: var(--muted); font-size: 14px; }
     a { color: var(--accent); }
   </style>
@@ -38,6 +43,11 @@
     <div class="tag">Agentic Programming · Lab 01</div>
     <h1>Agent Programming Lab 01 Task</h1>
     <p class="lead">A live website built and deployed with an AI coding agent.</p>
+
+    <a class="card play" href="chess960/">
+      <h2>&#9822; Play Cyber Chess 960 &rarr;</h2>
+      <p>A 3D neon Fischer Random chess arena with cinematic captures. Runs entirely in your browser.</p>
+    </a>
 
     <div class="card">
       <h2>The task</h2>
